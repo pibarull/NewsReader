@@ -7,17 +7,20 @@
 //
 
 import UIKit
+import SafariServices
 
 class NewsDescriptionViewController: UIViewController {
 
     @IBOutlet weak var newsImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var fullText: UITextView!
+    @IBOutlet weak var pubDateLabel: UILabel!
     
     var rssItem: RSSItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         fillViews()
         
         titleLabel?.numberOfLines = 0
@@ -33,6 +36,9 @@ class NewsDescriptionViewController: UIViewController {
     }
     
     @IBAction func linkButton(_ sender: Any) {
+        let url = URL(string: rssItem!.link)!
+        let safariViewController = SFSafariViewController(url: url)
+        present(safariViewController, animated: true, completion: nil)
         
     }
     
@@ -47,6 +53,7 @@ class NewsDescriptionViewController: UIViewController {
             }
         }.resume()
         
+        pubDateLabel.text = rssItem?.pubDate
         titleLabel.text = rssItem?.title
         fullText.text = rssItem?.fullText
     }
