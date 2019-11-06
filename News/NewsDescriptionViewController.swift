@@ -15,12 +15,18 @@ class NewsDescriptionViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var fullText: UITextView!
     @IBOutlet weak var pubDateLabel: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     var rssItem: RSSItem?
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+//        scrollView.alwaysBounceVertical = true
+//        scrollView.zoom(to: scrollView.frame, animated: true)
         fillViews()
         
         titleLabel?.numberOfLines = 0
@@ -28,12 +34,15 @@ class NewsDescriptionViewController: UIViewController {
 
         fullText.translatesAutoresizingMaskIntoConstraints = true
         fullText.sizeToFit()
-
+        
+        
 //        var frame = fullText.frame
 //        frame.size.height = fullText.contentSize.height
 //        fullText.frame = frame
         
     }
+    
+    
     
     @IBAction func linkButton(_ sender: Any) {
         let url = URL(string: rssItem!.link)!
