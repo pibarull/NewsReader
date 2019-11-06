@@ -113,7 +113,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="FullText" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z1S-6W-df8">
-                                        <rect key="frame" x="0.0" y="380" width="383" height="241"/>
+                                        <rect key="frame" x="0.0" y="380" width="375" height="241"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -146,13 +146,13 @@
                                     <constraint firstItem="Dya-Mq-j8C" firstAttribute="leading" secondItem="6WA-AO-ByH" secondAttribute="leading" id="KEN-jm-22v"/>
                                     <constraint firstItem="laE-sT-WWY" firstAttribute="leading" secondItem="FPu-j4-OAn" secondAttribute="leading" constant="12" id="PBp-LO-6hv"/>
                                     <constraint firstItem="laE-sT-WWY" firstAttribute="top" secondItem="Dya-Mq-j8C" secondAttribute="bottom" constant="7" id="T0f-zL-FT9"/>
-                                    <constraint firstItem="UHe-oB-sBM" firstAttribute="leading" secondItem="z1S-6W-df8" secondAttribute="trailing" constant="-383" id="Uwi-Tu-Evj"/>
+                                    <constraint firstItem="UHe-oB-sBM" firstAttribute="leading" secondItem="z1S-6W-df8" secondAttribute="trailing" constant="-375" id="Uwi-Tu-Evj"/>
                                     <constraint firstItem="Dya-Mq-j8C" firstAttribute="top" secondItem="6WA-AO-ByH" secondAttribute="top" constant="17" id="VrL-fw-pET"/>
                                     <constraint firstItem="6WA-AO-ByH" firstAttribute="bottom" secondItem="z1S-6W-df8" secondAttribute="bottom" constant="66" id="e5w-rL-eTo"/>
-                                    <constraint firstItem="8a4-Iv-yyd" firstAttribute="trailing" secondItem="z1S-6W-df8" secondAttribute="trailing" constant="-16" id="eKY-DZ-26R"/>
+                                    <constraint firstItem="8a4-Iv-yyd" firstAttribute="trailing" secondItem="z1S-6W-df8" secondAttribute="trailing" constant="-8" id="eKY-DZ-26R"/>
                                     <constraint firstItem="FPu-j4-OAn" firstAttribute="trailing" secondItem="laE-sT-WWY" secondAttribute="trailing" constant="8" id="tPz-aW-PKp"/>
                                     <constraint firstItem="Dya-Mq-j8C" firstAttribute="trailing" secondItem="8a4-Iv-yyd" secondAttribute="trailing" constant="8" id="vOE-tM-3xP"/>
-                                    <constraint firstItem="UHe-oB-sBM" firstAttribute="trailing" secondItem="z1S-6W-df8" secondAttribute="trailing" constant="-8" id="zeO-of-zXf"/>
+                                    <constraint firstItem="UHe-oB-sBM" firstAttribute="trailing" secondItem="z1S-6W-df8" secondAttribute="trailing" id="zeO-of-zXf"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="FPu-j4-OAn"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="6WA-AO-ByH"/>
