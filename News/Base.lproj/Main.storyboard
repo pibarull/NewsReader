@@ -41,9 +41,14 @@
                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="hcQ-HE-FLy">
+                                            <rect key="frame" x="68" y="55" width="20" height="20"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="hcQ-HE-FLy" firstAttribute="centerX" secondItem="5mM-YY-efm" secondAttribute="centerX" id="4JS-RH-uDW"/>
                                         <constraint firstItem="Z7r-FY-b4h" firstAttribute="top" secondItem="5dU-AZ-dfy" secondAttribute="bottom" constant="8" id="69h-kt-nFp"/>
+                                        <constraint firstItem="hcQ-HE-FLy" firstAttribute="centerY" secondItem="5mM-YY-efm" secondAttribute="centerY" id="75M-a0-upe"/>
                                         <constraint firstItem="Z7r-FY-b4h" firstAttribute="leading" secondItem="5mM-YY-efm" secondAttribute="trailing" constant="8" id="7Zx-yg-i4u"/>
                                         <constraint firstAttribute="bottom" secondItem="Z7r-FY-b4h" secondAttribute="bottom" constant="11" id="9Gp-x2-q2a"/>
                                         <constraint firstItem="5mM-YY-efm" firstAttribute="leading" secondItem="T3Q-9L-BlG" secondAttribute="leading" id="C9S-Sa-njR"/>
@@ -59,6 +64,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="activityIndicator" destination="hcQ-HE-FLy" id="pYD-eF-DtC"/>
                                     <outlet property="newsImage" destination="5mM-YY-efm" id="gTe-Df-89n"/>
                                     <outlet property="pubDateLabel" destination="Z7r-FY-b4h" id="LlH-it-HCu"/>
                                     <outlet property="titleLabel" destination="5dU-AZ-dfy" id="ePg-4K-ujH"/>

@@ -11,16 +11,7 @@
 import UIKit
 
 class NewsTableViewController: UITableViewController {
-    
-    
-    @IBAction func refreshControl(_ sender: UIRefreshControl) {
-        //any actions to be done
-        fetchData()
-        print(self.newsToShow?.count)
-        sender.endRefreshing()
-    }
-    
-    private var toolBar = UIToolbar()
+
     private var categoryPicker  = UIPickerView()
     
     private var news: [RSSItem]? // Fetched news
@@ -43,6 +34,12 @@ class NewsTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    @IBAction func refreshControl(_ sender: UIRefreshControl) {
+        //any actions to be done
+        fetchData()
+        sender.endRefreshing()
+    }
+
     private func fetchData() {
         
         let feedPareser = FeedParser()
@@ -56,8 +53,8 @@ class NewsTableViewController: UITableViewController {
             self.categorySet.removeAll()
             self.categoryArr.insert("Всё", at: 0)
             
-            print(self.categoryToShow) // Creating news to show filtered by category
-            if self.categoryToShow == "Всё" {
+            //print(self.categoryToShow)
+            if self.categoryToShow == "Всё" { // Creating news to show filtered by category
                 self.newsToShow = self.news
             } else {
                 self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
