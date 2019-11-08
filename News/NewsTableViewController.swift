@@ -5,7 +5,7 @@
 //  Created by Илья Ершов on 04/11/2019.
 //  Copyright © 2019 Ilia Ershov. All rights reserved.
 //
-// News API Key: 20347ad859f342dea0312ffa01c7b445
+// Ссылка почему переход назад - свайп вниз, а не стрелка назад: https://habr.com/ru/company/ifree/blog/247871/
 
 
 import UIKit
@@ -16,42 +16,87 @@ class NewsTableViewController: UITableViewController {
     @IBAction func refreshControl(_ sender: UIRefreshControl) {
         //any actions to be done
         fetchData()
+        print(self.newsToShow?.count)
         sender.endRefreshing()
     }
     
+    private var toolBar = UIToolbar()
+    private var categoryPicker  = UIPickerView()
     
-    private var news: [RSSItem]?
+    private var news: [RSSItem]? // Fetched news
+    private var newsToShow: [RSSItem]? // Filtered news
+    private var categoryToShow: String = "Всё" // Chosen category to filter by
+    private var categorySet: Set<String> = []
+    private var categoryArr: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         
         fetchData()
+        
+        
         // Uncomment the following line to preserve selection between presentations
-         self.clearsSelectionOnViewWillAppear = false
+        //self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        tableView.estimatedRowHeight = 130
-//        tableView.rowHeight = UITableView.automaticDimension
-//        
-//    }
 
     private func fetchData() {
         
         let feedPareser = FeedParser()
         feedPareser.parseFeed(url: "http://www.vesti.ru/vesti.rss") { (rssItems) in
             self.news = rssItems
+            
+            for el in rssItems { // Createing set of categories
+                self.categorySet.insert(el.category)
+            }
+            self.categoryArr = self.categorySet.sorted()
+            self.categorySet.removeAll()
+            self.categoryArr.insert("Всё", at: 0)
+            
+            print(self.categoryToShow) // Creating news to show filtered by category
+            if self.categoryToShow == "Всё" {
+                self.newsToShow = self.news
+            } else {
+                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
+            }
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
-            print(self.news)
         }
+    }
+    
+    @IBAction func filterButton(_ sender: Any) {
+        let alertController = UIAlertController(title: "Выберите категорию", message: "", preferredStyle: .alert)
+
+        categoryToShow = "Всё"
         
+        categoryPicker = UIPickerView(frame: CGRect(x: 10, y: 60, width: 250, height: 150))
+        categoryPicker.dataSource = self
+        categoryPicker.delegate = self
+
+        alertController.view.addSubview(categoryPicker)
+
+        let action = UIAlertAction(title: "Найти", style: .default) {
+            (alert) in
+            
+            if self.categoryToShow == "Всё" {
+                self.newsToShow = self.news
+            } else {
+                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
+            }
+            
+            self.tableView.reloadData()
+        }
+
+        alertController.addAction(action)
         
+        let height:NSLayoutConstraint = NSLayoutConstraint(item: alertController.view!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: self.view.frame.height * 0.40)
+        alertController.view.addConstraint(height);
+        present(alertController, animated: true, completion: nil)
         
     }
     
@@ -64,7 +109,7 @@ class NewsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        guard let news = news else {
+        guard let news = newsToShow else {
             return 0
         }
         return news.count
@@ -74,11 +119,11 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NewsTableViewCell
 
-        cell.titleLabel?.text = news![indexPath.item].title
+        cell.titleLabel?.text = newsToShow![indexPath.item].title
         cell.titleLabel?.numberOfLines = 0
         cell.titleLabel?.lineBreakMode = .byWordWrapping
         
-        if let item = news?[indexPath.item] {
+        if let item = newsToShow?[indexPath.item] {
             cell.item = item
         }
     
@@ -137,9 +182,27 @@ class NewsTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "toFullNews" {
             let destination = segue.destination as? NewsDescriptionViewController
-            destination?.rssItem = news?[tableView.indexPathForSelectedRow!.item]
+            destination?.rssItem = newsToShow?[tableView.indexPathForSelectedRow!.item]
         }
     }
-    
 
+}
+
+extension NewsTableViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return categoryArr.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return categoryArr[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        categoryToShow = categoryArr[row]
+        print(categoryToShow)
+    }
 }

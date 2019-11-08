@@ -60,15 +60,16 @@ class FeedParser: NSObject, XMLParserDelegate {
     private var parserComplitionHandler: (([RSSItem]) -> Void)?
     
     //TODO: - DATE FORMATTER
-    func dateFormater(pubDate date: String) {
+    func dateFormater(pubDate date: String) -> String? {
         let formater = DateFormatter()
-        formater.dateFormat = "E, d MMM yyyy HH:mm:ss zzzz"
+        formater.dateFormat = "E, d MMM yyyy HH:mm:ss Z"
         //formater.dateFormat = "yyyy-MM-dd HH:mm"
         print(date)
 
         //formater.locale = Locale(identifier: "ru_RU")
         let date1 = formater.date(from: date)
         print(date1)
+        return date1?.description
         
     }
     
@@ -121,8 +122,11 @@ class FeedParser: NSObject, XMLParserDelegate {
             case "title": currentTitle += string
             case "description": currentDescription += string
             case "pubDate":
-                //dateFormater(pubDate: string)
-                currentPubDate += string
+                //if let date = dateFormater(pubDate: string) {
+                    //currentPubDate += date
+                //} else {
+                    currentPubDate += string
+                //}
             case "category": currentCategory += string
             case "enclosure": currentImageURL += string
             case "yandex:full-text": currentFullText += string
