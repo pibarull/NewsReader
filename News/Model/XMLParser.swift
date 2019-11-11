@@ -8,6 +8,21 @@
 
 import Foundation
 
+enum Months: String {
+    case jan = "Jan"
+    case feb = "Feb"
+    case mar = "Mar"
+    case apr = "Apr"
+    case may = "May"
+    case jun = "Jun"
+    case jul = "Jul"
+    case aug = "Aug"
+    case sep = "Sep"
+    case oct = "Oct"
+    case nov = "Nov"
+    case dec = "Dec"
+}
+
 struct RSSItem: Codable {
     let title: String
     let description: String
@@ -49,7 +64,7 @@ class FeedParser: NSObject, XMLParserDelegate {
     }
     private var currentFullText: String  = "" {
         didSet{
-            currentFullText = currentFullText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            //currentFullText = currentFullText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         }
     }
     private var currentLink: String  = "" {
@@ -61,16 +76,48 @@ class FeedParser: NSObject, XMLParserDelegate {
     
     //TODO: - DATE FORMATTER
     func dateFormater(pubDate date: String) -> String? {
-        let formater = DateFormatter()
-        formater.dateFormat = "E, d MMM yyyy HH:mm:ss Z"
-        //formater.dateFormat = "yyyy-MM-dd HH:mm"
-        print(date)
 
-        //formater.locale = Locale(identifier: "ru_RU")
-        let date1 = formater.date(from: date)
-        print(date1)
-        return date1?.description
+        var formatedDate: String?
         
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E, d MMM yyyy HH:mm:ssZ"
+        
+        if let date = formatter.date(from: date) {
+            let myFormatter = DateFormatter()
+            myFormatter.dateFormat = "d MMM HH:mm"
+            formatedDate = myFormatter.string(from: date)
+            
+            let start = formatedDate!.index(formatedDate!.startIndex, offsetBy: 3)
+            let end = formatedDate!.index(formatedDate!.startIndex, offsetBy: 6)
+            let range = start..<end
+
+            let mySubstring = formatedDate![range]
+            //print(mySubstring)
+            formatedDate?.removeSubrange(range)
+            
+            var res: String?
+            res = formatedDate
+            switch (String(mySubstring)) {
+                case Months.jan.rawValue:
+                    res?.insert(contentsOf:"Января", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.feb.rawValue: res?.insert(contentsOf:"Февраля", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.mar.rawValue: res?.insert(contentsOf:"Марта", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.apr.rawValue: res?.insert(contentsOf:"Апреля", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.may.rawValue: res?.insert(contentsOf:"Мая", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.jun.rawValue: res?.insert(contentsOf:"Июня", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.jul.rawValue: res?.insert(contentsOf:"Июля", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.aug.rawValue: res?.insert(contentsOf:"Августа", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.sep.rawValue: res?.insert(contentsOf:"Сентября", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.oct.rawValue: res?.insert(contentsOf:"Октября", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.nov.rawValue: res?.insert(contentsOf:"Ноября", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                case Months.dec.rawValue: res?.insert(contentsOf:"Декабря", at: (formatedDate?.index(formatedDate!.startIndex, offsetBy: 3))!)
+                default:
+                    return date.description
+            }
+            formatedDate = res
+        }
+        return formatedDate
     }
     
     func parseFeed(url: String, complitionHandler: (([RSSItem]) -> Void)?) {
@@ -122,11 +169,11 @@ class FeedParser: NSObject, XMLParserDelegate {
             case "title": currentTitle += string
             case "description": currentDescription += string
             case "pubDate":
-                //if let date = dateFormater(pubDate: string) {
-                    //currentPubDate += date
-                //} else {
+                if let date = dateFormater(pubDate: string) {
+                    currentPubDate += date
+                } else {
                     currentPubDate += string
-                //}
+                }
             case "category": currentCategory += string
             case "enclosure": currentImageURL += string
             case "yandex:full-text": currentFullText += string

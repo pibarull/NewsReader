@@ -14,27 +14,30 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var pubDateLabel: UILabel!
     @IBOutlet weak var newsImage: UIImageView!
+    @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var item: RSSItem! {
         didSet {
-            activityIndicator.isHidden = false
-            activityIndicator.startAnimating()
-            
             titleLabel.text = item.title
             pubDateLabel.text = item.pubDate
+            categoryLabel.text = item.category.uppercased()
             
-            guard let imageURL = URL( string: item.imageURL ) else { return }
-            URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
-                if let data = data, let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self.activityIndicator.stopAnimating()
-                        self.activityIndicator.isHidden = true
-                        self.activityIndicator.hidesWhenStopped = true
-                        self.newsImage.image = image
+            activityIndicator.isHidden = false // Setting an image to the cell
+            activityIndicator.startAnimating()
+            if let imageURL = URL( string: item.imageURL ) {
+                URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
+                    if let data = data, let image = UIImage(data: data) {
+                        
+                        DispatchQueue.main.async {
+                            self.activityIndicator.stopAnimating()
+                            self.activityIndicator.isHidden = true
+                            self.activityIndicator.hidesWhenStopped = true
+                            self.newsImage.image = image
+                        }
                     }
-                }
-            }.resume()
+                }.resume()
+            }
         }
     }
     

@@ -15,19 +15,16 @@ class NewsDescriptionViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var fullText: UITextView!
     @IBOutlet weak var pubDateLabel: UILabel!
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var scrollView: UIScrollView! // Not necessary
     
     var rssItem: RSSItem?
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-//        scrollView.alwaysBounceVertical = true
-//        scrollView.zoom(to: scrollView.frame, animated: true)
         fillViews()
+        
+        //scrollView.alwaysBounceVertical = true
         
         titleLabel?.numberOfLines = 0
         titleLabel?.lineBreakMode = .byWordWrapping
@@ -43,6 +40,11 @@ class NewsDescriptionViewController: UIViewController {
     }
     
     
+    @IBAction func shareButton(_ sender: Any) {
+        let acticityVC = UIActivityViewController(activityItems: [rssItem!.link], applicationActivities: nil)
+        acticityVC.popoverPresentationController?.sourceView = self.view
+        self.present(acticityVC, animated: true, completion: nil)
+    }
     
     @IBAction func linkButton(_ sender: Any) {
         let url = URL(string: rssItem!.link)!

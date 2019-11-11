@@ -23,9 +23,7 @@ class NewsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         fetchData()
-        
         
         // Uncomment the following line to preserve selection between presentations
         //self.clearsSelectionOnViewWillAppear = false
@@ -38,6 +36,7 @@ class NewsTableViewController: UITableViewController {
         //any actions to be done
         fetchData()
         sender.endRefreshing()
+        //tableView.reloadData()
     }
 
     private func fetchData() {
@@ -85,8 +84,9 @@ class NewsTableViewController: UITableViewController {
             } else {
                 self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
             }
-            
             self.tableView.reloadData()
+            self.tableView.setContentOffset(.zero, animated: true)
+            
         }
 
         alertController.addAction(action)
@@ -96,6 +96,8 @@ class NewsTableViewController: UITableViewController {
         present(alertController, animated: true, completion: nil)
         
     }
+    
+
     
     // MARK: - Table view data source
 
@@ -120,8 +122,10 @@ class NewsTableViewController: UITableViewController {
         cell.titleLabel?.numberOfLines = 0
         cell.titleLabel?.lineBreakMode = .byWordWrapping
         
-        if let item = newsToShow?[indexPath.item] {
+        if let item = newsToShow?[indexPath.item] { // Setting the cell's views
             cell.item = item
+            
+            
         }
     
         return cell
