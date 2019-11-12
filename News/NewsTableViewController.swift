@@ -129,8 +129,16 @@ class NewsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // Make cell text gray when piece of news has been read
+        let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
+        cell?.titleLabel.alpha = 0.5
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -178,8 +186,7 @@ class NewsTableViewController: UITableViewController {
             
             let index = self.indexOfSelectedRow ?? tableView.indexPathForSelectedRow!.row
             destination?.rssItem = newsToShow?[index]
-            //destination?.rssItem = newsToShow?[tableView.indexPathForSelectedRow!.row]
-            
+            self.indexOfSelectedRow = nil
         }
     }
 

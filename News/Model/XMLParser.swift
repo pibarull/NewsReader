@@ -37,16 +37,8 @@ class FeedParser: NSObject, XMLParserDelegate {
     private var rssItems: [RSSItem] = []
     private var currentElement: String = ""
     
-    private var currentTitle: String = "" {
-        didSet{
-            currentTitle = currentTitle.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        }
-    }
-    private var currentDescription: String = "" {
-        didSet{
-            currentDescription = currentDescription.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        }
-    }
+    private var currentTitle: String = ""
+    private var currentDescription: String = ""
     private var currentPubDate: String  = "" {
         didSet{
             currentPubDate = currentPubDate.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -62,11 +54,7 @@ class FeedParser: NSObject, XMLParserDelegate {
             currentCategory = currentCategory.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         }
     }
-    private var currentFullText: String  = "" {
-        didSet{
-            //currentFullText = currentFullText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        }
-    }
+    private var currentFullText: String  = ""
     private var currentLink: String  = "" {
         didSet{
             currentLink = currentLink.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)

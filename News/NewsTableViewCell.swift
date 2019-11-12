@@ -18,9 +18,11 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    
     var item: RSSItem! {
         didSet {
             titleLabel.text = item.title
+            //TODO: - center alling
             pubDateLabel.text = item.pubDate
             categoryLabel.text = item.category.uppercased()
             
