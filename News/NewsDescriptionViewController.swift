@@ -24,19 +24,13 @@ class NewsDescriptionViewController: UIViewController {
         
         fillViews()
         
-        //scrollView.alwaysBounceVertical = true
         
         titleLabel?.numberOfLines = 0
         titleLabel?.lineBreakMode = .byWordWrapping
 
         fullText.translatesAutoresizingMaskIntoConstraints = true
         fullText.sizeToFit()
-        
-        
-//        var frame = fullText.frame
-//        frame.size.height = fullText.contentSize.height
-//        fullText.frame = frame
-        
+
     }
     
     

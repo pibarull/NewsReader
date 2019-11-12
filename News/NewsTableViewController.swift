@@ -19,24 +19,18 @@ class NewsTableViewController: UITableViewController {
     private var categoryToShow: String = "Всё" // Chosen category to filter by
     private var categorySet: Set<String> = []
     private var categoryArr: [String] = []
+    var indexOfSelectedRow: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         fetchData()
-        
-        // Uncomment the following line to preserve selection between presentations
-        //self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     @IBAction func refreshControl(_ sender: UIRefreshControl) {
-        //any actions to be done
+
         fetchData()
         sender.endRefreshing()
-        //tableView.reloadData()
     }
 
     private func fetchData() {
@@ -118,26 +112,24 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NewsTableViewCell
 
+        cell.newsTableVC = self
         cell.titleLabel?.text = newsToShow![indexPath.item].title
         cell.titleLabel?.numberOfLines = 0
         cell.titleLabel?.lineBreakMode = .byWordWrapping
         
         if let item = newsToShow?[indexPath.item] { // Setting the cell's views
             cell.item = item
-            
-            
         }
     
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //return UITableView.automaticDimension
         return 130
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     /*
     // Override to support conditional editing of the table view.
@@ -183,7 +175,11 @@ class NewsTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "toFullNews" {
             let destination = segue.destination as? NewsDescriptionViewController
-            destination?.rssItem = newsToShow?[tableView.indexPathForSelectedRow!.item]
+            
+            let index = self.indexOfSelectedRow ?? tableView.indexPathForSelectedRow!.row
+            destination?.rssItem = newsToShow?[index]
+            //destination?.rssItem = newsToShow?[tableView.indexPathForSelectedRow!.row]
+            
         }
     }
 
@@ -204,6 +200,6 @@ extension NewsTableViewController: UIPickerViewDelegate, UIPickerViewDataSource 
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         categoryToShow = categoryArr[row]
-        print(categoryToShow)
+        //print(categoryToShow)
     }
 }
