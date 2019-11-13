@@ -26,6 +26,12 @@ class NewsTableViewCell: UITableViewCell {
             pubDateLabel.text = item.pubDate
             categoryLabel.text = item.category.uppercased()
             
+            if item.read {
+                titleLabel.alpha = 0.5
+            } else {
+                titleLabel.alpha = 1
+            }
+            
             activityIndicator.isHidden = false // Setting an image to the cell
             activityIndicator.startAnimating()
             if let imageURL = URL( string: item.imageURL ) {

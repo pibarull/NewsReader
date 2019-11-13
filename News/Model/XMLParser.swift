@@ -31,6 +31,7 @@ struct RSSItem: Codable {
     let category: String // Происшествия, спорт, общество, в мире, политика, Вести.Недвижимость
     let fullText: String //yandex:full-text
     let link: String //link to the sourse
+    var read: Bool = false
 }
 
 class FeedParser: NSObject, XMLParserDelegate {

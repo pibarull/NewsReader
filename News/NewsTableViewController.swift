@@ -13,6 +13,7 @@ import UIKit
 class NewsTableViewController: UITableViewController {
 
     private var categoryPicker  = UIPickerView()
+    //private var refreshControl:UIRefreshControl!
     
     private var news: [RSSItem]? // Fetched news
     private var newsToShow: [RSSItem]? // Filtered news
@@ -23,13 +24,15 @@ class NewsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         fetchData()
     }
-
+    
     @IBAction func refreshControl(_ sender: UIRefreshControl) {
 
         fetchData()
+        
+        //tableView.reloadData()
         sender.endRefreshing()
     }
 
@@ -46,16 +49,25 @@ class NewsTableViewController: UITableViewController {
             self.categorySet.removeAll()
             self.categoryArr.insert("Всё", at: 0)
             
-            //print(self.categoryToShow)
-            if self.categoryToShow == "Всё" { // Creating news to show filtered by category
-                self.newsToShow = self.news
-            } else {
-                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
-            }
+            self.filterNews()
+//            if self.categoryToShow == "Всё" { // Creating news to show filtered by category
+//                self.newsToShow = self.news
+//            } else {
+//                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
+//            }
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
+        }
+    }
+    
+    //func to filter news to show 
+    private func filterNews() {
+        if self.categoryToShow == "Всё" {
+            self.newsToShow = self.news
+        } else {
+            self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
         }
     }
     
@@ -73,11 +85,12 @@ class NewsTableViewController: UITableViewController {
         let action = UIAlertAction(title: "Найти", style: .default) {
             (alert) in
             
-            if self.categoryToShow == "Всё" {
-                self.newsToShow = self.news
-            } else {
-                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
-            }
+            self.filterNews()
+//            if self.categoryToShow == "Всё" {
+//                self.newsToShow = self.news
+//            } else {
+//                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
+//            }
             self.tableView.reloadData()
             self.tableView.setContentOffset(.zero, animated: true)
             
@@ -112,6 +125,8 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NewsTableViewCell
 
+        
+        
         cell.newsTableVC = self
         cell.titleLabel?.text = newsToShow![indexPath.item].title
         cell.titleLabel?.numberOfLines = 0
@@ -131,9 +146,12 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Make cell text gray when piece of news has been read
-        let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
-        cell?.titleLabel.alpha = 0.5
+        let item = newsToShow?[indexPath.row].title
+        let index = news?.firstIndex(where: {$0.title == item})
+        news?[index!].read = true
+        filterNews()
         
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -207,6 +225,5 @@ extension NewsTableViewController: UIPickerViewDelegate, UIPickerViewDataSource 
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         categoryToShow = categoryArr[row]
-        //print(categoryToShow)
     }
 }
