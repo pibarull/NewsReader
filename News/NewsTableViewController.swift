@@ -12,8 +12,8 @@ import UIKit
 
 class NewsTableViewController: UITableViewController {
 
+    // MARK: - Variables
     private var categoryPicker  = UIPickerView()
-    //private var refreshControl:UIRefreshControl!
     
     private var news: [RSSItem]? // Fetched news
     private var newsToShow: [RSSItem]? // Filtered news
@@ -22,6 +22,7 @@ class NewsTableViewController: UITableViewController {
     private var categoryArr: [String] = []
     var indexOfSelectedRow: Int?
     
+    // MARK: - Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,19 +30,15 @@ class NewsTableViewController: UITableViewController {
     }
     
     @IBAction func refreshControl(_ sender: UIRefreshControl) {
-
         fetchData()
-        
-        //tableView.reloadData()
         sender.endRefreshing()
     }
 
     private func fetchData() {
-        
         let feedPareser = FeedParser()
         feedPareser.parseFeed(url: "http://www.vesti.ru/vesti.rss") { (rssItems) in
-            self.news = rssItems
             
+            self.news = rssItems
             for el in rssItems { // Createing set of categories
                 self.categorySet.insert(el.category)
             }
@@ -50,11 +47,6 @@ class NewsTableViewController: UITableViewController {
             self.categoryArr.insert("Всё", at: 0)
             
             self.filterNews()
-//            if self.categoryToShow == "Всё" { // Creating news to show filtered by category
-//                self.newsToShow = self.news
-//            } else {
-//                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
-//            }
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -62,7 +54,7 @@ class NewsTableViewController: UITableViewController {
         }
     }
     
-    //func to filter news to show 
+    //func to filter newsToShow from all news
     private func filterNews() {
         if self.categoryToShow == "Всё" {
             self.newsToShow = self.news
@@ -75,7 +67,6 @@ class NewsTableViewController: UITableViewController {
         let alertController = UIAlertController(title: "Выберите категорию", message: "", preferredStyle: .alert)
 
         categoryToShow = "Всё"
-        
         categoryPicker = UIPickerView(frame: CGRect(x: 10, y: 60, width: 250, height: 150))
         categoryPicker.dataSource = self
         categoryPicker.delegate = self
@@ -86,25 +77,17 @@ class NewsTableViewController: UITableViewController {
             (alert) in
             
             self.filterNews()
-//            if self.categoryToShow == "Всё" {
-//                self.newsToShow = self.news
-//            } else {
-//                self.newsToShow = self.news?.filter{$0.category == self.categoryToShow}
-//            }
             self.tableView.reloadData()
             self.tableView.setContentOffset(.zero, animated: true)
-            
         }
 
         alertController.addAction(action)
         
         let height:NSLayoutConstraint = NSLayoutConstraint(item: alertController.view!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: self.view.frame.height * 0.40)
         alertController.view.addConstraint(height);
-        present(alertController, animated: true, completion: nil)
         
+        present(alertController, animated: true, completion: nil)
     }
-    
-
     
     // MARK: - Table view data source
 
@@ -121,12 +104,9 @@ class NewsTableViewController: UITableViewController {
         return news.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NewsTableViewCell
 
-        
-        
         cell.newsTableVC = self
         cell.titleLabel?.text = newsToShow![indexPath.item].title
         cell.titleLabel?.numberOfLines = 0
@@ -135,7 +115,7 @@ class NewsTableViewController: UITableViewController {
         if let item = newsToShow?[indexPath.item] { // Setting the cell's views
             cell.item = item
         }
-    
+        
         return cell
     }
     
@@ -144,14 +124,6 @@ class NewsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        // Make cell text gray when piece of news has been read
-        let item = newsToShow?[indexPath.row].title
-        let index = news?.firstIndex(where: {$0.title == item})
-        news?[index!].read = true
-        filterNews()
-        
-        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

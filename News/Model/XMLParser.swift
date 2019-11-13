@@ -28,16 +28,14 @@ struct RSSItem: Codable {
     let description: String
     let pubDate: String
     let imageURL: String
-    let category: String // Происшествия, спорт, общество, в мире, политика, Вести.Недвижимость
-    let fullText: String //yandex:full-text
-    let link: String //link to the sourse
-    var read: Bool = false
+    let category: String
+    let fullText: String
+    let link: String
 }
 
 class FeedParser: NSObject, XMLParserDelegate {
     private var rssItems: [RSSItem] = []
     private var currentElement: String = ""
-    
     private var currentTitle: String = ""
     private var currentDescription: String = ""
     private var currentPubDate: String  = "" {
@@ -63,12 +61,8 @@ class FeedParser: NSObject, XMLParserDelegate {
     }
     private var parserComplitionHandler: (([RSSItem]) -> Void)?
     
-    //TODO: - DATE FORMATTER
     func dateFormater(pubDate date: String) -> String? {
-
         var formatedDate: String?
-        
-        
         let formatter = DateFormatter()
         formatter.dateFormat = "E, d MMM yyyy HH:mm:ssZ"
         
@@ -82,7 +76,6 @@ class FeedParser: NSObject, XMLParserDelegate {
             let range = start..<end
 
             let mySubstring = formatedDate![range]
-            //print(mySubstring)
             formatedDate?.removeSubrange(range)
             
             var res: String?

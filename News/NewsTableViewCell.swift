@@ -18,26 +18,17 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    
     var item: RSSItem! {
         didSet {
             titleLabel.text = item.title
-            //TODO: - center alling
             pubDateLabel.text = item.pubDate
             categoryLabel.text = item.category.uppercased()
-            
-            if item.read {
-                titleLabel.alpha = 0.5
-            } else {
-                titleLabel.alpha = 1
-            }
             
             activityIndicator.isHidden = false // Setting an image to the cell
             activityIndicator.startAnimating()
             if let imageURL = URL( string: item.imageURL ) {
                 URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
                     if let data = data, let image = UIImage(data: data) {
-                        
                         DispatchQueue.main.async {
                             self.activityIndicator.stopAnimating()
                             self.activityIndicator.isHidden = true
@@ -50,7 +41,6 @@ class NewsTableViewCell: UITableViewCell {
         }
     }
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -61,7 +51,6 @@ class NewsTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
         // Configure the view for the selected state
     }
 
@@ -75,9 +64,7 @@ extension NewsTableViewCell: UIContextMenuInteractionDelegate {
         })
     }
     
-    
     func makeContextMenu() -> UIMenu {
-
         let share = UIAction(title: "Share", image: UIImage(systemName: "arrowshape.turn.up.right")) { action in
             let acticityVC = UIActivityViewController(activityItems: [self.item.link], applicationActivities: nil)
             acticityVC.popoverPresentationController?.sourceView = self.newsTableVC?.view
@@ -88,7 +75,6 @@ extension NewsTableViewCell: UIContextMenuInteractionDelegate {
     }
     
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
-        
         animator.addCompletion {
             self.newsTableVC?.indexOfSelectedRow = self.newsTableVC?.tableView.indexPath(for: self)?.row
             self.newsTableVC?.performSegue(withIdentifier: "toFullNews", sender: nil)

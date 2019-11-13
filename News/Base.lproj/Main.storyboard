@@ -202,7 +202,6 @@
                         <outlet property="fullText" destination="z1S-6W-df8" id="bPz-WP-xHK"/>
                         <outlet property="newsImage" destination="Dya-Mq-j8C" id="KnO-a2-NNt"/>
                         <outlet property="pubDateLabel" destination="laE-sT-WWY" id="3OT-Vc-206"/>
-                        <outlet property="scrollView" destination="aGB-7n-AZf" id="GoS-bj-RUB"/>
                         <outlet property="titleLabel" destination="8a4-Iv-yyd" id="oGK-Zf-wyy"/>
                     </connections>
                 </viewController>

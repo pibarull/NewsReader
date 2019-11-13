@@ -11,42 +11,20 @@ import SafariServices
 
 class NewsDescriptionViewController: UIViewController {
 
+    // MARK: - Variables
     @IBOutlet weak var newsImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var fullText: UITextView!
     @IBOutlet weak var pubDateLabel: UILabel!
-    @IBOutlet weak var scrollView: UIScrollView! // Not necessary
     
     var rssItem: RSSItem?
     
+    // MARK: - Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         
         fillViews()
-        
-        
-        titleLabel?.numberOfLines = 0
-        titleLabel?.lineBreakMode = .byWordWrapping
-
-        fullText.translatesAutoresizingMaskIntoConstraints = true
-        fullText.sizeToFit()
-
     }
-    
-    
-    @IBAction func shareButton(_ sender: Any) {
-        let acticityVC = UIActivityViewController(activityItems: [rssItem!.link], applicationActivities: nil)
-        acticityVC.popoverPresentationController?.sourceView = self.view
-        self.present(acticityVC, animated: true, completion: nil)
-    }
-    
-    @IBAction func linkButton(_ sender: Any) {
-        let url = URL(string: rssItem!.link)!
-        let safariViewController = SFSafariViewController(url: url)
-        present(safariViewController, animated: true, completion: nil)
-        
-    }
-    
     
     func fillViews() {
         guard let imageURL = URL( string: rssItem!.imageURL ) else { return }
@@ -61,7 +39,28 @@ class NewsDescriptionViewController: UIViewController {
         pubDateLabel.text = rssItem?.pubDate
         titleLabel.text = rssItem?.title
         fullText.text = rssItem?.fullText
+        
+        titleLabel?.numberOfLines = 0
+        titleLabel?.lineBreakMode = .byWordWrapping
+        titleLabel.sizeToFit()
+
+        fullText.translatesAutoresizingMaskIntoConstraints = true
+        fullText.sizeToFit()
     }
+    
+    @IBAction func shareButton(_ sender: Any) {
+        let acticityVC = UIActivityViewController(activityItems: [rssItem!.link], applicationActivities: nil)
+        acticityVC.popoverPresentationController?.sourceView = self.view
+        self.present(acticityVC, animated: true, completion: nil)
+    }
+    
+    @IBAction func linkButton(_ sender: Any) {
+        let url = URL(string: rssItem!.link)!
+        let safariViewController = SFSafariViewController(url: url)
+        present(safariViewController, animated: true, completion: nil)
+    }
+    
+    
 
     
     /*
